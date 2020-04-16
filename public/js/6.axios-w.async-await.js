@@ -34,6 +34,7 @@ const render = () => {
 
 const getTodos = async () => {
   todos = await axios.get('/todos')
+    .then(({ data }) => data);
   render();
 }
 
@@ -42,6 +43,7 @@ const addTodo = async ({ keyCode }) => {
   if (keyCode !== 13) return;
   if (content === '') return $inputTodo.value = '';
   todos = await axios.post('/todos', {id: generateId(), content, completed: false})
+    .then(({ data }) => data);
   render();
   $inputTodo.value = '';
 }
@@ -59,6 +61,7 @@ const swapNav = ({ target }) => {
 const toggleTodo = async ({ target }) => {
   const id = target.parentNode.id;
   todos = await axios.patch(`/todos/${id}`, {completed: target.checked})
+    .then(({ data }) => data);
   render();
 }
 
@@ -66,17 +69,20 @@ const removeTodo = async ({ target }) => {
   const id = target.parentNode.id;
   if (!target.matches('.todos > li > i')) return;
   todos = await axios.delete(`/todos/${id}`)
+    .then(({ data }) => data);
   render();
 }
 
 const toggleAll = async ({ target }) => {
   todos = await axios.patch('/todos', {completed: target.checked})
+    .then(({ data }) => data);
   render();
 };
 
 const clearCompleted = async ({ target }) => {
   if (!target.matches('.clear-completed > button')) return;
   todos = await axios.delete('/todos/completed')
+    .then(({ data }) => data);
   render();
   $completeAll.firstChild.nextSibling.checked = false;
 }
